@@ -26,6 +26,14 @@ const css = `
     animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* ── MOBILE SCALING ── */
+  @media (max-width: 420px) {
+    .scene {
+      width: 92vw;
+      height: calc(92vw * (217 / 380));
+    }
+  }
+
   .flipper {
     width: 100%;
     height: 100%;
@@ -87,7 +95,17 @@ const css = `
     justify-content: space-between;
   }
 
+  @media (max-width: 420px) {
+    .front-content {
+      padding: 5.5vw 5.5vw 4.5vw 7vw;
+    }
+  }
+
   .name-block { padding-top: 36px; }
+
+  @media (max-width: 420px) {
+    .name-block { padding-top: 7vw; }
+  }
 
   .f-name {
     font-family: 'Cormorant Garamond', serif;
@@ -99,12 +117,20 @@ const css = `
     text-transform: uppercase;
   }
 
+  @media (max-width: 420px) {
+    .f-name { font-size: 6vw; letter-spacing: 0.5vw; }
+  }
+
   .f-name-italic {
     font-style: italic;
     font-weight: 300;
     color: #C4A35A;
     font-size: 27px;
     letter-spacing: 1px;
+  }
+
+  @media (max-width: 420px) {
+    .f-name-italic { font-size: 5.8vw; }
   }
 
   .f-title {
@@ -116,6 +142,10 @@ const css = `
     color: rgba(196,163,90,0.7);
   }
 
+  @media (max-width: 420px) {
+    .f-title { font-size: 1.7vw; letter-spacing: 0.6vw; margin-top: 1vw; }
+  }
+
   .bottom-block {
     display: flex;
     flex-direction: column;
@@ -124,10 +154,18 @@ const css = `
     padding-top: 14px;
   }
 
+  @media (max-width: 420px) {
+    .bottom-block { gap: 1vw; padding-top: 2.5vw; }
+  }
+
   .contact-line {
     display: flex;
     align-items: baseline;
     gap: 10px;
+  }
+
+  @media (max-width: 420px) {
+    .contact-line { gap: 2vw; }
   }
 
   .contact-key {
@@ -138,6 +176,10 @@ const css = `
     color: rgba(196,163,90,0.5);
     width: 36px;
     flex-shrink: 0;
+  }
+
+  @media (max-width: 420px) {
+    .contact-key { font-size: 1.5vw; letter-spacing: 0.3vw; width: 7vw; }
   }
 
   .contact-val {
@@ -151,6 +193,10 @@ const css = `
     user-select: none;
   }
 
+  @media (max-width: 420px) {
+    .contact-val { font-size: 2.8vw; letter-spacing: 0.1vw; }
+  }
+
   .contact-val:hover { color: #C4A35A; }
 
   .company-stamp {
@@ -158,6 +204,10 @@ const css = `
     top: 22px;
     right: 26px;
     text-align: right;
+  }
+
+  @media (max-width: 420px) {
+    .company-stamp { top: 4vw; right: 5vw; }
   }
 
   .co-name {
@@ -169,6 +219,10 @@ const css = `
     color: rgba(196,163,90,0.8);
   }
 
+  @media (max-width: 420px) {
+    .co-name { font-size: 2.3vw; letter-spacing: 0.5vw; }
+  }
+
   .co-sub {
     font-size: 7px;
     font-weight: 300;
@@ -176,6 +230,10 @@ const css = `
     text-transform: uppercase;
     color: rgba(196,163,90,0.4);
     margin-top: 2px;
+  }
+
+  @media (max-width: 420px) {
+    .co-sub { font-size: 1.4vw; letter-spacing: 0.3vw; }
   }
 
   /* ── BACK ── */
@@ -194,6 +252,13 @@ const css = `
     position: relative;
     padding: 20px 22px;
     gap: 0;
+    align-items: center;
+  }
+
+  @media (max-width: 420px) {
+    .back-content {
+      padding: 4vw;
+    }
   }
 
   /* inset border */
@@ -220,8 +285,9 @@ const css = `
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding-right: 18px;
+    gap: 6px;
+    padding-right: 14px;
+    height: 100%;
   }
 
   .back-monogram {
@@ -239,6 +305,17 @@ const css = `
     user-select: none;
   }
 
+  @media (max-width: 420px) {
+    .back-monogram {
+      font-size: 11vw;
+      letter-spacing: -0.5vw;
+    }
+    .back-left {
+      gap: 1vw;
+      padding-right: 2.5vw;
+    }
+  }
+
   .back-company {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
@@ -249,6 +326,10 @@ const css = `
     text-align: center;
   }
 
+  @media (max-width: 420px) {
+    .back-company { font-size: 1.9vw; letter-spacing: 0.5vw; }
+  }
+
   .back-est {
     font-size: 7px;
     letter-spacing: 2px;
@@ -257,19 +338,31 @@ const css = `
     text-align: center;
   }
 
+  @media (max-width: 420px) {
+    .back-est { font-size: 1.4vw; letter-spacing: 0.3vw; }
+  }
+
   /* RIGHT col — contact details */
   .back-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 10px;
-    padding-left: 18px;
+    gap: 8px;
+    padding-left: 14px;
+    height: 100%;
+  }
+
+  @media (max-width: 420px) {
+    .back-right {
+      gap: 1.5vw;
+      padding-left: 2.5vw;
+    }
   }
 
   .back-contact-item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .back-contact-label {
@@ -278,6 +371,10 @@ const css = `
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: rgba(196,163,90,0.4);
+  }
+
+  @media (max-width: 420px) {
+    .back-contact-label { font-size: 1.4vw; letter-spacing: 0.3vw; }
   }
 
   .back-contact-val {
@@ -289,6 +386,17 @@ const css = `
     cursor: copy;
     transition: color 0.2s;
     user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  @media (max-width: 420px) {
+    .back-contact-val {
+      font-size: 2.5vw;
+      letter-spacing: 0;
+    }
   }
 
   .back-contact-val:hover { color: #C4A35A; }
@@ -296,8 +404,13 @@ const css = `
   /* social row */
   .back-social {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     margin-top: 2px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 420px) {
+    .back-social { gap: 1.2vw; margin-top: 0; }
   }
 
   .social-pill {
@@ -313,11 +426,18 @@ const css = `
     user-select: none;
   }
 
-  // .social-pill:hover {
-  //   color: rgba(196,163,90,0.85);
-  //   border-color: rgba(196,163,90,0.5); 
-  //   padding: 10px;
-  // }
+  @media (max-width: 420px) {
+    .social-pill {
+      font-size: 1.5vw;
+      padding: 0.4vw 1.5vw;
+      letter-spacing: 0.3vw;
+    }
+  }
+
+  .social-pill:hover {
+    color: rgba(196,163,90,0.85);
+    border-color: rgba(196,163,90,0.5);
+  }
 
   /* corner dots */
   .dot {
@@ -331,6 +451,14 @@ const css = `
   .dot-tr { top: 16px; right: 16px; }
   .dot-bl { bottom: 16px; left: 16px; }
   .dot-br { bottom: 16px; right: 16px; }
+
+  @media (max-width: 420px) {
+    .dot { width: 2px; height: 2px; }
+    .dot-tl { top: 3vw; left: 3vw; }
+    .dot-tr { top: 3vw; right: 3vw; }
+    .dot-bl { bottom: 3vw; left: 3vw; }
+    .dot-br { bottom: 3vw; right: 3vw; }
+  }
 
   /* hint */
   .hint {
@@ -433,14 +561,14 @@ export default function BusinessCard() {
                   <span className="f-name-italic">M.</span>
                   &nbsp;Musa
                 </div>
-                <div className="f-title">Executive Chef &amp;  Proprietor</div>
+                <div className="f-title">Executive Chef &amp; Proprietor</div>
               </div>
 
               <div className="bottom-block">
                 <div className="contact-line">
                   <span className="contact-key">Tel</span>
                   <span className="contact-val" title="Click to copy"
-                    onClick={(e) => copy(' +2349028949372', 'Tel', e)}>
+                    onClick={(e) => copy('+2349029949372', 'Tel', e)}>
                     +2349029949372
                   </span>
                 </div>
@@ -487,15 +615,15 @@ export default function BusinessCard() {
                 <div className="back-contact-item">
                   <span className="back-contact-label">Tel</span>
                   <span className="back-contact-val" title="Click to copy"
-                    onClick={(e) => copy(' +2349029949372', 'Tel', e)}>
-                     +2349029949372
+                    onClick={(e) => copy('+2349029949372', 'Tel', e)}>
+                    +2349029949372
                   </span>
                 </div>
                 <div className="back-contact-item">
                   <span className="back-contact-label">Email</span>
                   <span className="back-contact-val" title="Click to copy"
-                    onClick={(e) => copy(' latifatmm@defoodgroup.com', 'Email', e)}>
-                     latifatmm@defoodgroup.com
+                    onClick={(e) => copy('latifatmm@defoodgroup.com', 'Email', e)}>
+                    latifatmm@defoodgroup.com
                   </span>
                 </div>
                 <div className="back-contact-item">
@@ -510,7 +638,7 @@ export default function BusinessCard() {
                     onClick={(e) => copy('linkedin.com/in/defoodgroup', 'LinkedIn', e)}>
                     in
                   </span>
-                  <span  className="social-pill" title="Click to copy"
+                  <span className="social-pill" title="Click to copy"
                     onClick={(e) => copy('@defoodgroup', 'X handle', e)}>
                     𝕏
                   </span>
@@ -522,10 +650,6 @@ export default function BusinessCard() {
 
         </div>
       </div>
-
-  
     </>
   );
 }
-
-
