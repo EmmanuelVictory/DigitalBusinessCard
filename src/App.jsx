@@ -4,7 +4,6 @@ const css = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@200;300;400;500&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body { height: 100%; width: 100%; margin: 0; }
 
   body {
@@ -19,8 +18,8 @@ const css = `
   }
 
   .scene {
-    width: 380px;
-    height: 217px;
+    width: min(380px, 92vw);
+    height: calc(min(380px, 92vw) * (217 / 380));
     perspective: 1000px;
     cursor: pointer;
     animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -32,6 +31,8 @@ const css = `
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Force GPU layer — helps mobile honour backface-visibility */
+    will-change: transform;
   }
 
   .flipper.flipped {
@@ -42,18 +43,26 @@ const css = `
     position: absolute;
     inset: 0;
     border-radius: 10px;
+    /* All four vendor prefixes for maximum mobile support */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
     overflow: hidden;
+    /* translateZ(0) forces each face onto its own composite layer */
+    -webkit-transform: translateZ(0);
   }
 
   /* ── FRONT ── */
   .front {
     background: #0f0f0f;
+    /* Solid, fully opaque background — no transparency */
     box-shadow:
       0 0 0 1px rgba(196,163,90,0.25),
       0 25px 60px rgba(0,0,0,0.8),
       0 8px 24px rgba(0,0,0,0.5);
+    transform: rotateY(0deg) translateZ(1px);
+    -webkit-transform: rotateY(0deg) translateZ(1px);
   }
 
   .front::before {
@@ -180,11 +189,24 @@ const css = `
 
   /* ── BACK ── */
   .back {
-    background: linear-gradient(145deg, #161410 0%, #1e1a0e 60%, #161410 100%);
+    /* Fully opaque solid background — critical fix */
+    background: #161410;
+    /* Layered gradient on top via pseudo-element so base stays opaque */
     box-shadow:
       0 0 0 1px rgba(196,163,90,0.2),
       0 25px 60px rgba(0,0,0,0.8);
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) translateZ(1px);
+    -webkit-transform: rotateY(180deg) translateZ(1px);
+  }
+
+  /* gradient overlay on back — separate from the base so background stays solid */
+  .back::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, rgba(22,20,16,0) 0%, rgba(30,26,14,0.6) 60%, rgba(22,20,16,0) 100%);
+    pointer-events: none;
+    border-radius: 10px;
   }
 
   .back-content {
@@ -192,11 +214,11 @@ const css = `
     display: grid;
     grid-template-columns: 1fr 1px 1fr;
     position: relative;
+    z-index: 1;
     padding: 20px 22px;
     gap: 0;
   }
 
-  /* inset border */
   .back-content::before {
     content: '';
     position: absolute;
@@ -206,7 +228,6 @@ const css = `
     pointer-events: none;
   }
 
-  /* vertical gold divider */
   .back-divider {
     width: 1px;
     background: linear-gradient(to bottom, transparent, rgba(196,163,90,0.35), transparent);
@@ -214,7 +235,6 @@ const css = `
     align-self: stretch;
   }
 
-  /* LEFT col — monogram + tagline */
   .back-left {
     display: flex;
     flex-direction: column;
@@ -257,7 +277,6 @@ const css = `
     text-align: center;
   }
 
-  /* RIGHT col — contact details */
   .back-right {
     display: flex;
     flex-direction: column;
@@ -289,11 +308,13 @@ const css = `
     cursor: copy;
     transition: color 0.2s;
     user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .back-contact-val:hover { color: #C4A35A; }
 
-  /* social row */
   .back-social {
     display: flex;
     gap: 10px;
@@ -313,38 +334,23 @@ const css = `
     user-select: none;
   }
 
-  // .social-pill:hover {
-  //   color: rgba(196,163,90,0.85);
-  //   border-color: rgba(196,163,90,0.5); 
-  //   padding: 10px;
-  // }
+  .social-pill:hover {
+    color: rgba(196,163,90,0.85);
+    border-color: rgba(196,163,90,0.5);
+  }
 
-  /* corner dots */
   .dot {
     position: absolute;
     width: 3px;
     height: 3px;
     border-radius: 50%;
     background: rgba(196,163,90,0.3);
+    z-index: 2;
   }
   .dot-tl { top: 16px; left: 16px; }
   .dot-tr { top: 16px; right: 16px; }
   .dot-bl { bottom: 16px; left: 16px; }
   .dot-br { bottom: 16px; right: 16px; }
-
-  /* hint */
-  .hint {
-    font-size: 8px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(196,163,90,0.3);
-    user-select: none;
-    animation: breathe 3s ease-in-out infinite;
-  }
-  @keyframes breathe {
-    0%,100% { opacity: 0.3; }
-    50%      { opacity: 0.65; }
-  }
 
   @keyframes rise {
     from { opacity: 0; transform: translateY(24px) scale(0.97); }
@@ -421,109 +427,90 @@ export default function BusinessCard() {
           {/* ── FRONT ── */}
           <div className="card-side front">
             <div className="front-content">
-
               <div className="company-stamp">
                 <div className="co-name">De Food Group</div>
                 <div className="co-sub">march. 2026</div>
               </div>
-
               <div className="name-block">
                 <div className="f-name">
                   Latifat&nbsp;
                   <span className="f-name-italic">M.</span>
                   &nbsp;Musa
                 </div>
-                <div className="f-title">Executive Chef &amp;  Proprietor</div>
+                <div className="f-title">Executive Chef &amp; Proprietor</div>
               </div>
-
               <div className="bottom-block">
                 <div className="contact-line">
                   <span className="contact-key">Tel</span>
-                  <span className="contact-val" title="Click to copy"
-                    onClick={(e) => copy(' +2349028949372', 'Tel', e)}>
+                  <span className="contact-val" onClick={(e) => copy('+2349029949372', 'Tel', e)}>
                     +2349029949372
                   </span>
                 </div>
                 <div className="contact-line">
                   <span className="contact-key">Email</span>
-                  <span className="contact-val" title="Click to copy"
-                    onClick={(e) => copy('latifatmm@defoodgroup.com', 'Email', e)}>
+                  <span className="contact-val" onClick={(e) => copy('latifatmm@defoodgroup.com', 'Email', e)}>
                     latifatmm@defoodgroup.com
                   </span>
                 </div>
                 <div className="contact-line">
                   <span className="contact-key">Web</span>
-                  <span className="contact-val" title="Click to copy"
-                    onClick={(e) => copy('defoodgroup.com', 'Web', e)}>
+                  <span className="contact-val" onClick={(e) => copy('defoodgroup.com', 'Web', e)}>
                     defoodgroup.com
                   </span>
                 </div>
               </div>
-
             </div>
           </div>
 
           {/* ── BACK ── */}
           <div className="card-side back">
             <div className="back-content">
-
               <div className="dot dot-tl" />
               <div className="dot dot-tr" />
               <div className="dot dot-bl" />
               <div className="dot dot-br" />
 
-              {/* Left — identity */}
               <div className="back-left">
                 <div className="back-monogram">LMM</div>
                 <div className="back-company">De Food Group</div>
                 <div className="back-est">March. 2026 · Nigeria</div>
               </div>
 
-              {/* Divider */}
               <div className="back-divider" />
 
-              {/* Right — contacts */}
               <div className="back-right">
                 <div className="back-contact-item">
                   <span className="back-contact-label">Tel</span>
-                  <span className="back-contact-val" title="Click to copy"
-                    onClick={(e) => copy(' +2349029949372', 'Tel', e)}>
-                     +2349029949372
+                  <span className="back-contact-val" onClick={(e) => copy('+2349029949372', 'Tel', e)}>
+                    +2349029949372
                   </span>
                 </div>
                 <div className="back-contact-item">
                   <span className="back-contact-label">Email</span>
-                  <span className="back-contact-val" title="Click to copy"
-                    onClick={(e) => copy(' latifatmm@defoodgroup.com', 'Email', e)}>
-                     latifatmm@defoodgroup.com
+                  <span className="back-contact-val" onClick={(e) => copy('latifatmm@defoodgroup.com', 'Email', e)}>
+                    latifatmm@defoodgroup.com
                   </span>
                 </div>
                 <div className="back-contact-item">
                   <span className="back-contact-label">Web</span>
-                  <span className="back-contact-val" title="Click to copy"
-                    onClick={(e) => copy('defoodgroup.com', 'Web', e)}>
+                  <span className="back-contact-val" onClick={(e) => copy('defoodgroup.com', 'Web', e)}>
                     defoodgroup.com
                   </span>
                 </div>
                 <div className="back-social">
-                  <span className="social-pill" title="Click to copy"
-                    onClick={(e) => copy('linkedin.com/in/defoodgroup', 'LinkedIn', e)}>
+                  <span className="social-pill" onClick={(e) => copy('linkedin.com/in/defoodgroup', 'LinkedIn', e)}>
                     in
                   </span>
-                  <span  className="social-pill" title="Click to copy"
-                    onClick={(e) => copy('@defoodgroup', 'X handle', e)}>
+                  <span className="social-pill" onClick={(e) => copy('@defoodgroup', 'X handle', e)}>
                     𝕏
                   </span>
                 </div>
               </div>
-
             </div>
           </div>
 
         </div>
       </div>
-
-  
     </>
   );
 }
