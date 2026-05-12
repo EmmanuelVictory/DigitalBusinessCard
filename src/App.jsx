@@ -316,7 +316,7 @@ const css = `
   .b-pill:hover { background: rgba(192,57,43,0.06); }
 
   .sub-hint {
-    font-size: 10px;  margin-left: 75px; letter-spacing: 3px; text-transform: uppercase;
+    font-size: 10px;  margin-left: 70px; letter-spacing: 3px; text-transform: uppercase;
     color: #c0392b; margin-top: 24px; font-weight: 700;
   }
 
